@@ -47,7 +47,7 @@ function Signup({ onNavigate }) {
 
   return (
     <main className="min-h-screen bg-slate-100 px-4 py-6 text-slate-900 sm:px-8 sm:py-10">
-      <div className="mx-auto grid min-h-[calc(100vh-3rem)] max-w-6xl overflow-hidden rounded-3xl bg-white shadow-xl shadow-slate-900/10 lg:grid-cols-[0.85fr_1.15fr]">
+      <div className="mx-auto grid w-full min-h-[calc(100vh-3rem)] max-w-6xl overflow-hidden rounded-3xl bg-white shadow-xl shadow-slate-900/10 lg:grid-cols-[0.85fr_1.15fr]">
         <section className="flex flex-col justify-between bg-slate-950 p-7 text-white sm:p-10 lg:p-12">
           <div>
             <div className="flex items-center gap-3 text-sm font-semibold tracking-[0.2em] text-amber-300 uppercase">
