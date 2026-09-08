@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { registerCustomer } from '../axiosCalls/axios.js'
+import { axiosInstance } from '../axiosCalls/axios.js'
 import { getRegistrationErrors } from '../registrationValidation.js'
 
 const initialValues = {
@@ -33,7 +33,7 @@ function Signup({ onNavigate }) {
     setApiError('')
 
     try {
-      await registerCustomer(values)
+      await axiosInstance.post('/user/register', values)
       onNavigate('/login')
     } catch (error) {
       setApiError(

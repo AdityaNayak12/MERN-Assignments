@@ -8,6 +8,3 @@ export const axiosInstance = axios.create({
     }
 
 })
-
-export const registerCustomer = (values) =>
-    axiosInstance.post("/user/register", values)
