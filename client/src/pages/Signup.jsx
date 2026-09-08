@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { axiosInstance } from '../axiosCalls/axios.js'
 import { getRegistrationErrors } from '../registrationValidation.js'
 
@@ -9,7 +10,8 @@ const initialValues = {
   password: '',
 }
 
-function Signup({ onNavigate }) {
+function Signup() {
+  const navigate = useNavigate()
   const [values, setValues] = useState(initialValues)
   const [errors, setErrors] = useState({})
   const [apiError, setApiError] = useState('')
@@ -34,7 +36,7 @@ function Signup({ onNavigate }) {
 
     try {
       await axiosInstance.post('/user/register', values)
-      onNavigate('/login')
+      navigate('/login')
     } catch (error) {
       setApiError(
         error.response?.data?.message ||
@@ -137,16 +139,12 @@ function Signup({ onNavigate }) {
 
             <p className="mt-7 text-center text-sm text-slate-600">
               Already have an account?{' '}
-              <a
+              <Link
                 className="font-semibold text-amber-700 underline decoration-amber-300 underline-offset-4 hover:text-amber-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-600"
-                href="/login"
-                onClick={(event) => {
-                  event.preventDefault()
-                  onNavigate('/login')
-                }}
+                to="/login"
               >
                 Sign in
-              </a>
+              </Link>
             </p>
           </div>
         </section>
