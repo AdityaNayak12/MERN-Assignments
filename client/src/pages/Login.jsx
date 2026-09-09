@@ -36,20 +36,20 @@ function Login() {
         <section className="flex flex-col justify-between bg-slate-950 p-7 text-white sm:p-10 lg:p-12">
           <div>
             <div className="flex items-center gap-3 text-sm font-semibold tracking-[0.2em] text-amber-300 uppercase">
-              <span className="grid h-9 w-9 place-items-center rounded-xl bg-amber-300 text-sm font-black text-slate-950">C</span>
-              Compass
+              <span className="grid h-9 w-9 place-items-center rounded-xl bg-amber-300 text-sm font-black text-slate-950">S</span>
+              ShopKart
             </div>
             <div className="mt-20 max-w-sm lg:mt-28">
               <p className="text-sm font-semibold tracking-[0.18em] text-slate-400 uppercase">Welcome back</p>
               <h1 className="mt-4 text-4xl leading-tight font-semibold tracking-tight sm:text-5xl">
-                Keep moving with clarity.
+                Shop what you love.
               </h1>
               <p className="mt-6 text-base leading-7 text-slate-300">
-                Sign in to return to your focused space and pick up where you left off.
+                Sign in to discover products, manage your orders, and enjoy a seamless shopping experience.
               </p>
             </div>
           </div>
-          <p className="mt-16 text-sm text-slate-500">Simple tools. Steady progress.</p>
+          <p className="mt-16 text-sm text-slate-500">Great products. Simple shopping.</p>
         </section>
 
         <section className="p-7 sm:p-10 lg:p-12">

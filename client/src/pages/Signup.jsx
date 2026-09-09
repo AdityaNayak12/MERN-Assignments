@@ -76,7 +76,6 @@ function Signup() {
                 <p className="text-sm font-semibold tracking-wide text-amber-700 uppercase">Create account</p>
                 <h2 className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">Welcome in.</h2>
               </div>
-              <span className="hidden rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-500 sm:inline-block">1 min setup</span>
             </div>
             <p className="mt-3 text-sm leading-6 text-slate-600">Use your details below to get started.</p>
 
@@ -87,7 +86,6 @@ function Signup() {
                 id="fullName"
                 label="Full name"
                 onChange={handleChange}
-                placeholder="Ada Lovelace"
                 value={values.fullName}
               />
               <FormField
@@ -96,7 +94,6 @@ function Signup() {
                 id="email"
                 label="Email address"
                 onChange={handleChange}
-                placeholder="you@example.com"
                 type="email"
                 value={values.email}
               />
@@ -106,7 +103,6 @@ function Signup() {
                 id="phone"
                 label="Phone number"
                 onChange={handleChange}
-                placeholder="(555) 123-4567"
                 type="tel"
                 value={values.phone}
               />
@@ -116,7 +112,6 @@ function Signup() {
                 id="password"
                 label="Password"
                 onChange={handleChange}
-                placeholder="At least 7 characters"
                 type="password"
                 value={values.password}
               />
