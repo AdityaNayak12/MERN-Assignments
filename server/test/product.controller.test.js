@@ -71,21 +71,62 @@ test("createProduct rejects missing fields and non-positive prices", async () =>
   }
 });
 
-test("createProduct returns 500 when product creation fails", async () => {
+test("createProduct rejects malformed field types with 400", async () => {
   const originalCreate = Product.create;
   Product.create = async () => {
-    throw new Error("database unavailable");
+    throw new Error("create should not be called");
   };
+  const res = response();
+
+  try {
+    await createProduct({ body: { ...productInput, name: 123 } }, res);
+  } finally {
+    Product.create = originalCreate;
+  }
+
+  assert.equal(res.statusCode, 400);
+});
+
+test("createProduct maps model validation errors to a generic 400", async () => {
+  const originalCreate = Product.create;
+  const originalConsoleError = console.error;
+  const validationError = new Error("secret schema details");
+  validationError.name = "ValidationError";
+  Product.create = async () => {
+    throw validationError;
+  };
+  console.error = () => {};
   const res = response();
 
   try {
     await createProduct({ body: productInput }, res);
   } finally {
     Product.create = originalCreate;
+    console.error = originalConsoleError;
+  }
+
+  assert.equal(res.statusCode, 400);
+  assert.deepEqual(res.body, { success: false, message: "Invalid product data" });
+});
+
+test("createProduct returns 500 when product creation fails", async () => {
+  const originalCreate = Product.create;
+  const originalConsoleError = console.error;
+  Product.create = async () => {
+    throw new Error("database unavailable");
+  };
+  console.error = () => {};
+  const res = response();
+
+  try {
+    await createProduct({ body: productInput }, res);
+  } finally {
+    Product.create = originalCreate;
+    console.error = originalConsoleError;
   }
 
   assert.equal(res.statusCode, 500);
-  assert.equal(res.body.success, false);
+  assert.deepEqual(res.body, { success: false, message: "Internal server error" });
 });
 
 test("getProducts combines search and category filters and sorts by price", async () => {
@@ -150,4 +191,44 @@ test("getProductById returns 404 when the product does not exist", async () => {
   }
 
   assert.equal(res.statusCode, 404);
+});
+
+test("getProducts returns a generic 500 response when listing fails", async () => {
+  const originalFind = Product.find;
+  const originalConsoleError = console.error;
+  Product.find = () => {
+    throw new Error("database details");
+  };
+  console.error = () => {};
+  const res = response();
+
+  try {
+    await getProducts({ query: {} }, res);
+  } finally {
+    Product.find = originalFind;
+    console.error = originalConsoleError;
+  }
+
+  assert.equal(res.statusCode, 500);
+  assert.deepEqual(res.body, { success: false, message: "Internal server error" });
+});
+
+test("getProductById returns a generic 500 response when retrieval fails", async () => {
+  const originalFindById = Product.findById;
+  const originalConsoleError = console.error;
+  Product.findById = async () => {
+    throw new Error("database details");
+  };
+  console.error = () => {};
+  const res = response();
+
+  try {
+    await getProductById({ params: { id: "507f1f77bcf86cd799439011" } }, res);
+  } finally {
+    Product.findById = originalFindById;
+    console.error = originalConsoleError;
+  }
+
+  assert.equal(res.statusCode, 500);
+  assert.deepEqual(res.body, { success: false, message: "Internal server error" });
 });

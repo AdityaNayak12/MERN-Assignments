@@ -5,7 +5,11 @@ export const createProduct = async (req, res) => {
   try {
     const { name, description, price, category, image, stock } = req.body ?? {};
 
-    if (!name || !description || !category || !image || price === undefined || stock === undefined) {
+    if (
+      [name, description, category, image].some((value) => typeof value !== "string" || !value) ||
+      price === undefined ||
+      stock === undefined
+    ) {
       return res.status(400).json({ success: false, message: "All fields are required" });
     }
     if (!Number.isFinite(price) || price <= 0) {
@@ -18,7 +22,11 @@ export const createProduct = async (req, res) => {
     const product = await Product.create({ name, description, price, category, image, stock });
     return res.status(201).json({ success: true, product });
   } catch (error) {
-    return res.status(500).json({ success: false, message: "Internal server error", error: error.message });
+    console.error("createProduct failed:", error);
+    if (error?.name === "ValidationError" || error?.name === "CastError") {
+      return res.status(400).json({ success: false, message: "Invalid product data" });
+    }
+    return res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
 
@@ -44,7 +52,8 @@ export const getProducts = async (req, res) => {
     const products = await productsQuery;
     return res.status(200).json({ success: true, count: products.length, products });
   } catch (error) {
-    return res.status(500).json({ success: false, message: "Internal server error", error: error.message });
+    console.error("getProducts failed:", error);
+    return res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
 
@@ -62,6 +71,7 @@ export const getProductById = async (req, res) => {
 
     return res.status(200).json({ success: true, product });
   } catch (error) {
-    return res.status(500).json({ success: false, message: "Internal server error", error: error.message });
+    console.error("getProductById failed:", error);
+    return res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
