@@ -87,6 +87,51 @@ test("createProduct rejects malformed field types with 400", async () => {
   assert.equal(res.statusCode, 400);
 });
 
+test("createProduct rejects whitespace-only required strings", async () => {
+  const originalCreate = Product.create;
+  Product.create = async () => {
+    throw new Error("create should not be called");
+  };
+  const res = response();
+
+  try {
+    await createProduct({ body: { ...productInput, name: "   " } }, res);
+  } finally {
+    Product.create = originalCreate;
+  }
+
+  assert.equal(res.statusCode, 400);
+});
+
+test("createProduct trims required strings before creation", async () => {
+  const originalCreate = Product.create;
+  let createdInput;
+  Product.create = async (input) => {
+    createdInput = input;
+    return input;
+  };
+  const res = response();
+
+  try {
+    await createProduct(
+      {
+        body: {
+          ...productInput,
+          name: " Keyboard ",
+          description: " Mechanical keyboard ",
+          category: " Accessories ",
+          image: " keyboard.jpg ",
+        },
+      },
+      res,
+    );
+  } finally {
+    Product.create = originalCreate;
+  }
+
+  assert.deepEqual(createdInput, productInput);
+});
+
 test("createProduct maps model validation errors to a generic 400", async () => {
   const originalCreate = Product.create;
   const originalConsoleError = console.error;
@@ -177,6 +222,29 @@ test("getProductById rejects an invalid product ID", async () => {
   }
 
   assert.equal(res.statusCode, 400);
+});
+
+test("getProducts escapes regex metacharacters and rejects malformed query types", async () => {
+  const originalFind = Product.find;
+  let query;
+  Product.find = (filters) => {
+    query = filters;
+    return Promise.resolve([]);
+  };
+
+  try {
+    const literalResponse = response();
+    await getProducts({ query: { search: "keyboard.*(pro)" } }, literalResponse);
+    assert.deepEqual(query, {
+      name: { $regex: "keyboard\\.\\*\\(pro\\)", $options: "i" },
+    });
+
+    const malformedResponse = response();
+    await getProducts({ query: { search: ["keyboard"] } }, malformedResponse);
+    assert.equal(malformedResponse.statusCode, 400);
+  } finally {
+    Product.find = originalFind;
+  }
 });
 
 test("getProductById returns 404 when the product does not exist", async () => {

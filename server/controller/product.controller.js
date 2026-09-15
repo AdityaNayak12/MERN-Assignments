@@ -4,9 +4,17 @@ import Product from "../models/product.model.js";
 export const createProduct = async (req, res) => {
   try {
     const { name, description, price, category, image, stock } = req.body ?? {};
+    const [cleanName, cleanDescription, cleanCategory, cleanImage] = [
+      name,
+      description,
+      category,
+      image,
+    ].map((value) => (typeof value === "string" ? value.trim() : value));
 
     if (
-      [name, description, category, image].some((value) => typeof value !== "string" || !value) ||
+      [cleanName, cleanDescription, cleanCategory, cleanImage].some(
+        (value) => typeof value !== "string" || !value,
+      ) ||
       price === undefined ||
       stock === undefined
     ) {
@@ -19,7 +27,14 @@ export const createProduct = async (req, res) => {
       return res.status(400).json({ success: false, message: "Stock cannot be negative" });
     }
 
-    const product = await Product.create({ name, description, price, category, image, stock });
+    const product = await Product.create({
+      name: cleanName,
+      description: cleanDescription,
+      price,
+      category: cleanCategory,
+      image: cleanImage,
+      stock,
+    });
     return res.status(201).json({ success: true, product });
   } catch (error) {
     console.error("createProduct failed:", error);
@@ -35,8 +50,18 @@ export const getProducts = async (req, res) => {
     const { search, category, sort } = req.query;
     const filters = {};
 
+    if (
+      (search !== undefined && typeof search !== "string") ||
+      (category !== undefined && typeof category !== "string")
+    ) {
+      return res.status(400).json({ success: false, message: "Invalid query parameters" });
+    }
+
     if (search) {
-      filters.name = { $regex: search, $options: "i" };
+      filters.name = {
+        $regex: search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
+        $options: "i",
+      };
     }
     if (category) {
       filters.category = category;
