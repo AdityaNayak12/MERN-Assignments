@@ -29,6 +29,12 @@ function response() {
   };
 }
 
+test("Product rejects a zero price during model validation", () => {
+  const validationError = new Product({ ...productInput, price: 0 }).validateSync();
+
+  assert.ok(validationError?.errors.price);
+});
+
 test("createProduct creates a product and returns 201", async () => {
   const originalCreate = Product.create;
   const createdProduct = { _id: "product-id", ...productInput };
