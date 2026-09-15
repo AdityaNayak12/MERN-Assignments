@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 import customerRoute from "./routes/customer.route.js";
+import productRoute from "./routes/product.route.js";
 dotenv.config();
 
 const app = express();
@@ -35,6 +36,7 @@ app.use((req, res, next) => {
 
 
 app.use("/user", customerRoute);
+app.use("/products", productRoute);
 
 
 const port = 8001;
