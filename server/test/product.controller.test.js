@@ -29,10 +29,13 @@ function response() {
   };
 }
 
-test("Product rejects a zero price during model validation", () => {
-  const validationError = new Product({ ...productInput, price: 0 }).validateSync();
+test("Product accepts fractional positive prices and rejects zero during model validation", async () => {
+  await assert.doesNotReject(new Product({ ...productInput, price: 0.5 }).validate());
 
-  assert.ok(validationError?.errors.price);
+  await assert.rejects(
+    new Product({ ...productInput, price: 0 }).validate(),
+    (error) => Boolean(error?.errors?.price),
+  );
 });
 
 test("createProduct creates a product and returns 201", async () => {
