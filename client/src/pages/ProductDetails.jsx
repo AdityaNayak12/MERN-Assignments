@@ -1,27 +1,32 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useReducer } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { formatPrice, getProduct, getStockLabel } from '../services/productApi.js'
+import {
+  formatPrice,
+  getProduct,
+  getStockLabel,
+  productDetailsInitialState,
+  productDetailsReducer,
+} from '../services/productApi.js'
 
 function ProductDetails() {
   const { id } = useParams()
-  const [product, setProduct] = useState(null)
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState('')
+  const [{ product, isLoading, error }, dispatch] = useReducer(
+    productDetailsReducer,
+    productDetailsInitialState,
+  )
 
   useEffect(() => {
+    dispatch({ type: 'loading' })
     let isCurrent = true
 
     getProduct(id)
       .then((nextProduct) => {
         if (!isCurrent) return
-        setProduct(nextProduct)
+        dispatch({ type: 'success', product: nextProduct })
       })
       .catch(() => {
         if (!isCurrent) return
-        setError('Something went wrong while loading products.')
-      })
-      .finally(() => {
-        if (isCurrent) setIsLoading(false)
+        dispatch({ type: 'error', error: 'Something went wrong while loading products.' })
       })
 
     return () => {

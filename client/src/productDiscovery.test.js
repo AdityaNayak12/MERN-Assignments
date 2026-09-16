@@ -8,6 +8,8 @@ import {
   getProductsState,
   getStockLabel,
   PRODUCT_CATEGORIES,
+  productDetailsInitialState,
+  productDetailsReducer,
 } from './services/productApi.js'
 
 test('product filters expose the required category options', () => {
@@ -65,4 +67,14 @@ test('product rendering helpers expose loading, error, empty, and ready states',
 test('stock labels distinguish available and unavailable products', () => {
   assert.equal(getStockLabel(4), '4 in stock')
   assert.equal(getStockLabel(0), 'Out of stock')
+})
+
+test('product detail loading reset clears stale product and error state', () => {
+  assert.deepEqual(
+    productDetailsReducer(
+      { product: { _id: 'old' }, error: 'old error', isLoading: false },
+      { type: 'loading' },
+    ),
+    productDetailsInitialState,
+  )
 })

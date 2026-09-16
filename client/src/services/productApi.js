@@ -1,6 +1,14 @@
 import { axiosInstance } from '../axiosCalls/axios.js'
 
 export const PRODUCT_CATEGORIES = ['Electronics', 'Fashion', 'Books', 'Home']
+export const productDetailsInitialState = { product: null, error: '', isLoading: true }
+
+export function productDetailsReducer(state, action) {
+  if (action.type === 'loading') return { ...productDetailsInitialState }
+  if (action.type === 'success') return { product: action.product, error: '', isLoading: false }
+  if (action.type === 'error') return { product: null, error: action.error, isLoading: false }
+  return state
+}
 
 export function buildProductParams(params = {}) {
   return Object.fromEntries(
