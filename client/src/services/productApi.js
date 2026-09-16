@@ -1,5 +1,7 @@
 import { axiosInstance } from '../axiosCalls/axios.js'
 
+export const PRODUCT_CATEGORIES = ['Electronics', 'Fashion', 'Books', 'Home']
+
 export function buildProductParams(params = {}) {
   return Object.fromEntries(
     ['search', 'category']

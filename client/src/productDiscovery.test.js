@@ -7,7 +7,12 @@ import {
   getProducts,
   getProductsState,
   getStockLabel,
+  PRODUCT_CATEGORIES,
 } from './services/productApi.js'
+
+test('product filters expose the required category options', () => {
+  assert.deepEqual(PRODUCT_CATEGORIES, ['Electronics', 'Fashion', 'Books', 'Home'])
+})
 
 test('buildProductParams keeps only non-empty search and category values', () => {
   assert.deepEqual(

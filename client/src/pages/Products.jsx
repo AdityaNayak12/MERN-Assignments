@@ -4,13 +4,13 @@ import ProductCard from '../components/ProductCard.jsx'
 import {
   getProducts,
   getProductsState,
+  PRODUCT_CATEGORIES,
 } from '../services/productApi.js'
 
 const emptyFilters = { search: '', category: '' }
 
 function Products() {
   const [filters, setFilters] = useState(emptyFilters)
-  const [draftFilters, setDraftFilters] = useState(emptyFilters)
   const [products, setProducts] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState('')
@@ -38,24 +38,11 @@ function Products() {
 
   const state = getProductsState({ isLoading, error, products })
 
-  const handleChange = (event) => {
+  const handleFilterChange = (event) => {
     const { name, value } = event.target
-    setDraftFilters((currentFilters) => ({ ...currentFilters, [name]: value }))
-  }
-
-  const handleSubmit = (event) => {
-    event.preventDefault()
     setError('')
     setIsLoading(true)
-    setFilters({ ...draftFilters })
-  }
-
-  const handleClear = () => {
-    setDraftFilters(emptyFilters)
-    if (filters.search === '' && filters.category === '') return
-    setError('')
-    setIsLoading(true)
-    setFilters(emptyFilters)
+    setFilters((currentFilters) => ({ ...currentFilters, [name]: value }))
   }
 
   return (
@@ -72,38 +59,33 @@ function Products() {
           </div>
         </header>
 
-        <form className="mt-10 grid gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:grid-cols-[1fr_1fr_auto_auto] sm:items-end" onSubmit={handleSubmit}>
+        <div className="mt-10 grid gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:grid-cols-2 sm:items-end">
           <div>
             <label className="block text-sm font-semibold text-slate-800" htmlFor="search">Search products</label>
             <input
               className="mt-2 w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none transition placeholder:text-slate-400 focus:border-amber-600 focus:ring-4 focus:ring-amber-100"
               id="search"
               name="search"
-              onChange={handleChange}
+              onChange={handleFilterChange}
               placeholder="Try keyboard or lamp"
               type="search"
-              value={draftFilters.search}
+              value={filters.search}
             />
           </div>
           <div>
             <label className="block text-sm font-semibold text-slate-800" htmlFor="category">Category</label>
-            <input
+            <select
               className="mt-2 w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none transition placeholder:text-slate-400 focus:border-amber-600 focus:ring-4 focus:ring-amber-100"
               id="category"
               name="category"
-              onChange={handleChange}
-              placeholder="e.g. Accessories"
-              type="text"
-              value={draftFilters.category}
-            />
+              onChange={handleFilterChange}
+              value={filters.category}
+            >
+              <option value="">All Categories</option>
+              {PRODUCT_CATEGORIES.map((category) => <option key={category} value={category}>{category}</option>)}
+            </select>
           </div>
-          <button className="rounded-xl bg-slate-950 px-5 py-3.5 text-sm font-semibold text-white transition hover:bg-slate-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-600" type="submit">
-            Apply filters
-          </button>
-          <button className="rounded-xl border border-slate-300 px-5 py-3.5 text-sm font-semibold text-slate-700 transition hover:border-slate-500 hover:text-slate-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-600" onClick={handleClear} type="button">
-            Clear
-          </button>
-        </form>
+        </div>
 
         <section className="mt-10" aria-live="polite" aria-label="Product results">
           {state === 'loading' && <p className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-slate-600">Loading products...</p>}
