@@ -4,12 +4,14 @@ import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 import customerRoute from "./routes/customer.route.js";
 import productRoute from "./routes/product.route.js";
+import wishlistRoute from "./routes/wishlist.route.js";
+import cartRoute from "./routes/cart.route.js";
 dotenv.config();
 
 const app = express();
 const dbUrl = process.env.dbUrl;
-app.use(express.json())
-app.use(cookieParser())
+app.use(express.json());
+app.use(cookieParser());
 
 const allowedClientOrigins = new Set([
   "http://localhost:5173",
@@ -24,7 +26,7 @@ app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Credentials", "true");
     res.setHeader("Vary", "Origin");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-    res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+    res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS");
   }
 
   if (req.method === "OPTIONS") {
@@ -34,10 +36,10 @@ app.use((req, res, next) => {
   next();
 });
 
-
 app.use("/user", customerRoute);
 app.use("/products", productRoute);
-
+app.use("/wishlist", wishlistRoute);
+app.use("/cart", cartRoute);
 
 const port = 8001;
 app.listen(port, () => {
