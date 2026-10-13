@@ -9,7 +9,6 @@ const customerSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true,
-
     },
     password: {
         type: String,
@@ -19,6 +18,23 @@ const customerSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    wishlist: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product"
+    }],
+    cart: [{
+        product: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Product",
+            required: true
+        },
+        quantity: {
+            type: Number,
+            required: true,
+            default: 1,
+            min: [1, "Quantity must be at least 1"]
+        }
+    }],
     createdAt: {
         type: Date
     },
