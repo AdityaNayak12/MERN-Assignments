@@ -12,7 +12,7 @@ export function productDetailsReducer(state, action) {
 
 export function buildProductParams(params = {}) {
   return Object.fromEntries(
-    ['search', 'category']
+    ['search', 'category', 'sort']
       .map((key) => [key, typeof params[key] === 'string' ? params[key].trim() : ''])
       .filter(([, value]) => value),
   )

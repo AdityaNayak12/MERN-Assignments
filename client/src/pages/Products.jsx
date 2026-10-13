@@ -7,7 +7,7 @@ import {
   PRODUCT_CATEGORIES,
 } from '../services/productApi.js'
 
-const emptyFilters = { search: '', category: '' }
+const emptyFilters = { search: '', category: '', sort: '' }
 
 function Products() {
   const [filters, setFilters] = useState(emptyFilters)
@@ -59,7 +59,7 @@ function Products() {
           </div>
         </header>
 
-        <div className="mt-10 grid gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:grid-cols-2 sm:items-end">
+        <div className="mt-10 grid gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:grid-cols-3 sm:items-end">
           <div>
             <label className="block text-sm font-semibold text-slate-800" htmlFor="search">Search products</label>
             <input
@@ -83,6 +83,20 @@ function Products() {
             >
               <option value="">All Categories</option>
               {PRODUCT_CATEGORIES.map((category) => <option key={category} value={category}>{category}</option>)}
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-semibold text-slate-800" htmlFor="sort">Sort by</label>
+            <select
+              className="mt-2 w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none transition placeholder:text-slate-400 focus:border-amber-600 focus:ring-4 focus:ring-amber-100"
+              id="sort"
+              name="sort"
+              onChange={handleFilterChange}
+              value={filters.sort}
+            >
+              <option value="">Featured</option>
+              <option value="price_asc">Price: Low to High</option>
+              <option value="price_desc">Price: High to Low</option>
             </select>
           </div>
         </div>
