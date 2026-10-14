@@ -6,6 +6,10 @@ import Products from './pages/Products.jsx'
 import ProductDetails from './pages/ProductDetails.jsx'
 import Wishlist from './pages/Wishlist.jsx'
 import Cart from './pages/Cart.jsx'
+import Checkout from './pages/Checkout.jsx'
+import Orders from './pages/Orders.jsx'
+import OrderDetails from './pages/OrderDetails.jsx'
+import OrderSuccess from './pages/OrderSuccess.jsx'
 import ProtectedRoute from './component/PrivateRoutes.jsx'
 import PublicRoute from './component/PublicRoutes.jsx'
 import Navbar from './components/Navbar.jsx'
@@ -22,6 +26,10 @@ function App() {
         <Route path="/products/:id" element={<ProtectedRoute><ProductDetails /></ProtectedRoute>} />
         <Route path="/wishlist" element={<ProtectedRoute><Wishlist /></ProtectedRoute>} />
         <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
+        <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
+        <Route path="/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
+        <Route path="/orders/:id" element={<ProtectedRoute><OrderDetails /></ProtectedRoute>} />
+        <Route path="/order-success/:id" element={<ProtectedRoute><OrderSuccess /></ProtectedRoute>} />
         <Route path="*" element={<Navigate replace to="/register" />} />
       </Routes>
     </>
