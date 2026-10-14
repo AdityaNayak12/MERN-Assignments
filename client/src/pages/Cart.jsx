@@ -1,9 +1,10 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useCart } from '../context/CartContext.jsx'
 import CartItem from '../components/CartItem.jsx'
 import { formatPrice } from '../services/productApi.js'
 
 export default function Cart() {
+  const navigate = useNavigate()
   const { cartItems, isLoading, error, cartCount, subtotal, fetchCart } = useCart()
 
   if (isLoading) {
@@ -113,7 +114,7 @@ export default function Cart() {
 
             <button
               type="button"
-              onClick={() => alert('Proceeding to checkout in Lab 06!')}
+              onClick={() => navigate('/checkout')}
               className="w-full rounded-xl bg-slate-950 px-5 py-3.5 text-sm font-semibold text-white transition hover:bg-slate-800 cursor-pointer shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-600"
             >
               Proceed to Checkout

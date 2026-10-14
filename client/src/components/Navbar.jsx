@@ -12,7 +12,7 @@ export default function Navbar() {
   const wishlistCount = user.wishlist ? user.wishlist.length : 0;
 
   return (
-    <nav className="bg-slate-900 text-white px-6 py-4 flex justify-between items-center">
+    <nav className="bg-slate-900 text-white px-6 py-4 flex justify-between items-center shadow-md">
       <div className="font-bold text-xl tracking-wider text-amber-300">
         <Link to="/home">ShopKart</Link>
       </div>
@@ -31,6 +31,11 @@ export default function Navbar() {
         <li>
           <Link to="/cart" className="hover:text-amber-300 transition">
             Cart ({cartCount})
+          </Link>
+        </li>
+        <li>
+          <Link to="/orders" className="hover:text-amber-300 transition">
+            Orders
           </Link>
         </li>
         <li>

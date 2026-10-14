@@ -106,6 +106,10 @@ export function CartProvider({ children }) {
     }
   }
 
+  const clearCart = useCallback(() => {
+    setCartItems([])
+  }, [])
+
   const cartCount = useMemo(() => calculateCartCount(cartItems), [cartItems])
   const subtotal = useMemo(() => calculateSubtotal(cartItems), [cartItems])
 
@@ -131,6 +135,7 @@ export function CartProvider({ children }) {
     addToCart,
     updateQuantity,
     removeFromCart,
+    clearCart,
   }
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>
