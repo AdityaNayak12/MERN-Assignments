@@ -6,6 +6,8 @@ import customerRoute from "./routes/customer.route.js";
 import productRoute from "./routes/product.route.js";
 import wishlistRoute from "./routes/wishlist.route.js";
 import cartRoute from "./routes/cart.route.js";
+import orderRoute from "./routes/order.route.js";
+
 dotenv.config();
 
 const app = express();
@@ -25,7 +27,7 @@ app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", origin);
     res.setHeader("Access-Control-Allow-Credentials", "true");
     res.setHeader("Vary", "Origin");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
     res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS");
   }
 
@@ -40,6 +42,7 @@ app.use("/user", customerRoute);
 app.use("/products", productRoute);
 app.use("/wishlist", wishlistRoute);
 app.use("/cart", cartRoute);
+app.use("/orders", orderRoute);
 
 const port = 8001;
 app.listen(port, () => {
